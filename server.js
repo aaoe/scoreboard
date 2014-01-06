@@ -27,7 +27,6 @@ app.get('/messages', function(req, res) {
     json: true,
     headers: headers
     }, function(error, response, body) {
-
       respond(error, response, res, body, 20);
     });
 });
@@ -43,11 +42,7 @@ app.get('/message/:id', function(req, res) {
 });
 
 function respond(error, apiResponse, res, body, number) {
-  if(error) {
-    return res.send(body.statuscode, 'Error');
-  } else if (body.statuscode == 500) {
-    return res.send(204, 'No content');
-  } else if (apiResponse.statusCode == 200 || apiResponse.statusCode == 204) {
+  if(!error && (apiResponse.statusCode == 200 || apiResponse.statusCode == 204)) {
     if (number) {
       return res.json(_.first(body, number));
     } else {
