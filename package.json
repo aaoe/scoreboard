@@ -1,24 +1,43 @@
 {
-  "name": "scoreboard-bootcamp",
+  "name": "scoreboard",
+  "description": "The best project ever.",
   "version": "0.0.1",
-  "description": "scoreboard-bootcamp",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+  "homepage": "http://scoreboard-bootcamp.herokuapp.com/",
+  "author": {
+    "name": "Alexander Vassbotn Røyne-Helgesen",
+    "email": "alexander@phun-ky.net"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/aaoe/scoreboard"
+    "url": "git://github.com/aaoe/scoreboard.git"
   },
-  "author": "",
-  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/aaoe/scoreboard/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://scoreboard-bootcamp.herokuapp.com//blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "server.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt nodeunit",
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "~3.4.7",
     "request": "~2.30.0",
     "async": "*"
-  }
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-nodeunit": "~0.2.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt": "~0.4.2"
+  },
+  "keywords": []
 }
