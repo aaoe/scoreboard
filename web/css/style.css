@@ -1,0 +1,21 @@
+#messages .author{
+	
+	font-size: 14px;
+	line-height: 18px;
+}
+#messages .author,
+#messages .body,
+#messages .number-of-comments{
+	display: block;
+}
+
+#messages .number-of-comments{
+	margin-top:10px;
+}
+
+#messages .message{
+	margin-bottom:20px;
+	border-bottom: 1px solid #efefef;
+	box-shadow: 0px 11px 18px -17px rgba(0, 0, 0, 0.1);
+	padding-bottom: 5px;
+}

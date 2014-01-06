@@ -16,12 +16,31 @@ module.exports = function(grunt) {
       },
       lib: {
         src: ['lib/**/*.js']
-      },
+      },      
+      app: {
+        src: ['web/js/app.js']
+      },      
       test: {
         src: ['test/**/*.js']
       },
     },
+    mustache: {
+      files : {
+        src: 'web/templates/',
+        dest: 'web/js/templates.js',
+        options: {
+          prefix: '(function($){ window.templates =',
+          postfix: '})(jQuery);',
+          verbose: true
+        }
+      }
+    },
     watch: {
+      templates : {
+        files : ['web/templates/*.mustache'],
+        tasks : ['mustache']
+
+      },
       gruntfile: {
         files: '<%= jshint.gruntfile.src %>',
         tasks: ['jshint:gruntfile']
@@ -41,8 +60,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-mustache');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'nodeunit']);
+  grunt.registerTask('default', ['jshint', 'nodeunit','watch']);
 
 };

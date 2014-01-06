@@ -1,3 +1,13 @@
-{{#messages}}
-{{partial message}}
-{{/messages}}
+
+    {{#each messages}}
+
+    <div class="col-md-10 message">
+<span class="author">
+  Av: {{#with user}}<strong>{{name}}</strong>{{/with}}
+</span>
+    <span class="body">{{body}}</span>
+
+    <span class="number-of-comments">Antall kommentarer: {{length comments}}</span>
+    </div>
+
+    {{/each}}
