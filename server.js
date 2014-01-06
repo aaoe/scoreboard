@@ -1,6 +1,7 @@
 
 var express = require('express');
 var request = require('request');
+var _ = require('underscore');
 var app = express();
 
 var user = process.env.BC_USERNAME || 'user';
@@ -19,7 +20,7 @@ app.get('/messages', function(req, res) {
       if(error) {
         console.log("an error has occured. keep calm and carry on.");
       }
-      res.json(body);
+      res.json(_.first(body, 20));
     });
 });
 
