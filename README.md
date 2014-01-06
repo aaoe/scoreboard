@@ -1,2 +1,2 @@
-senior-bootcamp-archetype-2014
+scoreboard bootcamp
 ==============================

@@ -1,7 +1,7 @@
 {
-  "name": "senior-bootcamp-2014-archetype",
-  "version": "0.0.0",
-  "description": "senior-bootcamp-archetype-2014 ==============================",
+  "name": "scoreboard-bootcamp",
+  "version": "0.0.1",
+  "description": "scoreboard-bootcamp",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,12 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/bekk/senior-bootcamp-2014-archetype.git"
+    "url": "git://github.com/aaoe/scoreboard"
   },
   "author": "",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/bekk/senior-bootcamp-2014-archetype/issues"
+    "url": "https://github.com/aaoe/scoreboard/issues"
   },
   "dependencies": {
     "express": "~3.4.7",
