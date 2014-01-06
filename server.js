@@ -26,10 +26,7 @@ app.get('/messages', function(req, res) {
     json: true,
     headers: headers
     }, function(error, response, body) {
-      if(error) {
-        console.log("an error has occured. keep calm and carry on.");
-      }
-      res.json(_.first(body, 20));
+      respond(error, response, res, body, 20);
     });
 });
 
@@ -39,17 +36,23 @@ app.get('/message/:id', function(req, res) {
     json: true,
     headers: headers
     }, function(error, response, body) {
-      respond(error, res, body);
+      respond(error, response, res, body);
     });
 });
 
-function respond(error, res, body) {
+function respond(error, apiResponse, res, body, number) {
   if(error) {
-    return res.send(body.statuscode, 'Oh no!');
+    return res.send(body.statuscode, 'Error');
   } else if (body.statuscode == 500) {
-    return res.send(204);
+    return res.send(204, 'No content');
+  } else if (apiResponse.statusCode == 200 || apiResponse.statusCode == 204) {
+    if (number) {
+      return res.json(_.first(body, number));
+    } else {
+      return res.json(body);
+    }
   } else {
-    return res.json(body);
+    return res.send(apiResponse.statusCode, 'Error');
   }
 }
 
