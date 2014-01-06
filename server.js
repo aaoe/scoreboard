@@ -8,9 +8,6 @@ var pass = process.env.BC_PASSWORD || 'pass';
 var api_url = "/api";
 var api_base_url = 'http://'+ user + ':' + pass + '@' + process.env.API_URL + api_url || "http://localhost" + api_url;
 
-
-app.use(express.basicAuth(user, pass));
-
 app.get('/messages', function(req, res) {
   request.get({
     url: api_base_url + '/messages',
