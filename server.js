@@ -4,10 +4,11 @@ var request = require('request');
 var _ = require('underscore');
 var app = express();
 
-var user = process.env.BC_USERNAME || 'user';
-var pass = process.env.BC_PASSWORD || 'pass';
+var user = process.env.BC_USERNAME;
+var pass = process.env.BC_PASSWORD;
 var api_url = "/api";
-var api_base_url = 'http://'+ user + ':' + pass + '@' + process.env.API_URL + api_url || "http://localhost" + api_url;
+var authentication = 'http://'+ user + ':' + pass + '@';
+var api_base_url =  authentication + process.env.API_URL + api_url || "http://localhost" + api_url;
 
 app.get('/', function(req, res){
   res.sendfile(__dirname + '/web/index.html');
