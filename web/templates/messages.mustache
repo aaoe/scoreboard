@@ -3,11 +3,11 @@
 
     <div class="col-md-10 message">
 <span class="author">
-  Av: {{#with user}}<strong>{{name}}</strong>{{/with}}
+  {{#with user}}<strong><a href="">{{name}}</a></strong>{{/with}}
 </span>
     <span class="body">{{body}}</span>
 
-    <span class="number-of-comments">Antall kommentarer: {{length comments}}</span>
+    <span class="number-of-comments">Antall kommentarer: <span class="badge">{{length comments}}</span></span>
     </div>
 
     {{/each}}
