@@ -3,6 +3,7 @@ var express = require('express');
 var request = require('request');
 var app = express();
 
+console.log(process.env.BC_USERNAME);
 
 var demo_url = "https://api.github.com/users/bekkopen/repos";
 app.get('/', function(req, res) {
