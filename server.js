@@ -14,6 +14,8 @@ var headers = {
             'User-Agent': 'request'
                 };
 
+app.use(express.static(__dirname + '/web'));
+
 app.get('/', function(req, res){
   res.sendfile(__dirname + '/web/index.html');
 });
