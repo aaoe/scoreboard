@@ -11,7 +11,8 @@ var authentication = 'http://'+ user + ':' + pass + '@';
 var api_base_url =  authentication + process.env.API_URL + api_url || "http://localhost" + api_url;
 
 var headers = {
-            'User-Agent': 'request'
+            'User-Agent': 'request',
+            'Content-Type' : 'text/html'
                 };
 
 app.use(express.static(__dirname + '/web'));
@@ -26,6 +27,7 @@ app.get('/messages', function(req, res) {
     json: true,
     headers: headers
     }, function(error, response, body) {
+
       respond(error, response, res, body, 20);
     });
 });

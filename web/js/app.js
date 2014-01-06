@@ -10,10 +10,37 @@
 
         return '<a href="' + url + '">' + url + '</a>';
 
-    })
+    });
 
     // or alternatively
     // return text.replace(urlRegex, '<a href="$1">$1</a>')
+	}
+
+	function usernameify(text){		
+    
+    regex   = /(^|[^@\w])@(\w{1,40})\b/g,
+    replace = '$1<a href="https://socialcast.bekk.no/users/$2">@$2</a>';
+
+		return text.replace( regex, replace );
+
+	}
+
+	function hashtagify(text){		
+    
+    regex   = /\S*#(?:\[[^\]]+\]|\S+)/g;
+
+		return text.replace( regex, function(tag){
+			return '<a href="https://socialcast.bekk.no/users/">'+tag+'</a>';
+		} );
+
+	}
+
+	function newlineify(text){
+
+		var regex = /\n/g;
+
+		return text.replace(regex, '<br/>');
+
 	}
 
 	window.scoreboard = window.scoreboard || {};
@@ -68,9 +95,26 @@
 
 			console.log('scoreboard:views:messages:rendered', view);
 
+			
+
 			$('#messages .body').each(function(i, el){
 				$(this).html(urlify($(this).html()));
-			})
+			});
+
+			
+
+			$('#messages .body').each(function(i, el){
+				$(this).html(newlineify($(this).html()));
+
+			});
+
+			$('#messages .body').each(function(i, el){
+				$(this).html(usernameify($(this).html()));
+			});
+
+			$('#messages .body').each(function(i, el){
+				$(this).html(hashtagify($(this).html()));
+			});
 
 		});
 
