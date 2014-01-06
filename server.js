@@ -4,10 +4,14 @@ var request = require('request');
 var app = express();
 
 
-var demo_url = "https://api.github.com/users/bekkopen/repos";
-app.get('/', function(req, res) {
+var api_url = "/api";
+var api_base_url = process.env.API_URL + api_url || "http://localhost" + api_url;
+
+
+
+app.get('/messages', function(req, res) {
   request.get({
-    url: demo_url,
+    url: api_base_url + '/messages',
     json: true,
     headers: {
             'User-Agent': 'request'
@@ -18,8 +22,22 @@ app.get('/', function(req, res) {
       }
       res.json(body);
     });
+});
 
 
+app.get('/message/:id', function(req, res) {
+  request.get({
+    url: api_base_url + '/messages/' + req.params.id,
+    json: true,
+    headers: {
+            'User-Agent': 'request'
+                }
+    }, function(error, response, body) {
+      if(error) {
+        console.log("an error has occured. keep calm and carry on.");
+      }
+      res.json(body);
+    });
 });
 
 
