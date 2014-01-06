@@ -6,8 +6,10 @@ var app = express();
 
 var api_url = "/api";
 var api_base_url = process.env.API_URL + api_url || "http://localhost" + api_url;
+var user = process.env.BC_USERNAME || 'user';
+var pass = process.env.BC_PASSWORD || 'pass';
 
-
+app.use(express.basicAuth(user, pass));
 
 app.get('/messages', function(req, res) {
   request.get({
@@ -23,7 +25,6 @@ app.get('/messages', function(req, res) {
       res.json(body);
     });
 });
-
 
 app.get('/message/:id', function(req, res) {
   request.get({
