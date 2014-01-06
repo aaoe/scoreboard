@@ -3,11 +3,11 @@ var express = require('express');
 var request = require('request');
 var app = express();
 
-
-var api_url = "/api";
-var api_base_url = process.env.API_URL + api_url || "http://localhost" + api_url;
 var user = process.env.BC_USERNAME || 'user';
 var pass = process.env.BC_PASSWORD || 'pass';
+var api_url = "/api";
+var api_base_url = 'http://'+ user + ':' + pass + '@' + process.env.API_URL + api_url || "http://localhost" + api_url;
+
 
 app.use(express.basicAuth(user, pass));
 
