@@ -72,7 +72,18 @@ app.get('/message/:id', function(req, res) {
         json: true,
         headers: headers
       }, function(error, response, b) {
-        body.likes = b
+        body.likes = b;
+
+
+   if(body.user){
+        var employee = getEmployee(body.user.name);
+
+          if(employee){
+            body.user.senioritet = employee.Seniority;
+            body.user.avdeling = employee.Department; 
+          }  
+      } 
+
         respond(error, response, res, body);
       });
     });
@@ -80,10 +91,10 @@ app.get('/message/:id', function(req, res) {
 
 function getEmployee(name) {
   return _.find(ansattListe.getAnsatte(), function(ansatt) {
-      if(findName(name, ansatt.Name)) {
-        return ansatt;
-      }
+        return _.intersection(name, ansatt.Name).length >= 2;
   });
+
+
 }
 
 function findName(scName, bekkName) {
