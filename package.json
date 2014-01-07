@@ -32,7 +32,8 @@
     "express": "~3.4.7",
     "request": "~2.30.0",
     "async": "*",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "q": "~1.0.0"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.8.0",
