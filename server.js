@@ -37,7 +37,15 @@ app.get('/message/:id', function(req, res) {
     json: true,
     headers: headers
     }, function(error, response, body) {
-      respond(error, response, res, body);
+
+    request.get({
+        url: api_base_url + '/messages/' + req.params.id + '/likes',
+        json: true,
+        headers: headers
+      }, function(error, response, b) {
+        body.likes = b
+        respond(error, response, res, body);
+      });
     });
 });
 
