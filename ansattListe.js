@@ -26,7 +26,6 @@ function cacheAnsattListe(){
 
     _.each(body, function(employee){
     	return getAnsatt(employee.Id).then(function(fullEmployee) {
-    		console.log(fullEmployee[0].Seniority);
     		ansatte.push(fullEmployee[0]);
     	});
     });

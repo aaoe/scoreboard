@@ -1,0 +1,40 @@
+#messages .author{
+	
+	font-size: 14px;
+	line-height: 18px;
+}
+#messages .author,
+#messages .body,
+#messages .number-of-comments{
+	display: block;
+}
+
+#messages .number-of-comments{
+	margin-top:10px;
+}
+
+#messages .message{
+	margin-bottom:20px;
+	border-bottom: 1px solid #efefef;
+	box-shadow: 0px 11px 18px -17px rgba(0, 0, 0, 0.1);
+	padding-bottom: 5px;
+}
+
+#messages .message .youtube-thumb{
+	display: block;
+	width: 120px;
+	clear: both;
+	margin-bottom: 20px;
+	margin-top:10px;
+	position: relative;
+	z-index: 100;
+}
+
+#messages .message .youtube-thumb .glyphicon{
+	position: absolute;
+	top:26px;
+	left:45px;
+	z-index: 1000;
+	font-size: 40px;
+color: rgba(255,255,255,0.8);
+}

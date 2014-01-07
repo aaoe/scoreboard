@@ -16,10 +16,13 @@ var api_base_url =  authentication + process.env.API_URL + api_url || "http://lo
 var user_api_base_url =  authentication + process.env.USER_API_URL || "http://localhost";
 
 var headers = {
-  'User-Agent': 'request'
+  'User-Agent': 'request',
+  'Content-Type' : 'text/html'
 };
 
 ansattListe.cacheAnsattListe();
+
+app.use(express.static(__dirname + '/web'));
 
 app.get('/', function(req, res){
   res.sendfile(__dirname + '/web/index.html');
@@ -52,21 +55,27 @@ app.get('/messages', function(req, res) {
 
       });
 
-    res.json(messagesWithEmployeeInfo);
+    respond(error, response, res, messagesWithEmployeeInfo, 20);
   });
-});
+  });
+
 
 app.get('/message/:id', function(req, res) {
   request.get({
     url: api_base_url + '/messages/' + req.params.id,
     json: true,
     headers: headers
-  }, function(error, response, body) {
-    if(error) {
-      console.log("an error has occured. keep calm and carry on.");
-    }
-    res.json(body);
-  });
+   }, function(error, response, body) {
+
+    request.get({
+        url: api_base_url + '/messages/' + req.params.id + '/likes',
+        json: true,
+        headers: headers
+      }, function(error, response, b) {
+        body.likes = b
+        respond(error, response, res, body);
+      });
+    });
 });
 
 function getEmployee(name) {
@@ -102,7 +111,17 @@ function findName(scName, bekkName) {
 }
 
 
-
+function respond(error, apiResponse, res, body, number) {
+  if(!error && (apiResponse.statusCode == 200 || apiResponse.statusCode == 204)) {
+    if (number) {
+      return res.json(_.first(body, number));
+    } else {
+      return res.json(body);
+    }
+  } else {
+    return res.send(apiResponse.statusCode, 'Error');
+  }
+}
 
 // if on heroku use heroku port.
 var port = process.env.PORT || 1339;

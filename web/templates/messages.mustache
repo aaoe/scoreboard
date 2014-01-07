@@ -1,0 +1,13 @@
+
+    {{#each messages}}
+
+    <div class="col-md-10 message">
+<span class="author">
+  {{#with user}}<strong><a href="">{{name}}</a></strong>{{/with}}
+</span>
+    <span class="body">{{body}}</span>
+
+    <span class="number-of-comments">Antall kommentarer: <span class="badge">{{length comments}}</span></span>
+    </div>
+
+    {{/each}}
