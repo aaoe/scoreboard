@@ -8,6 +8,7 @@ var q = require('q');
 var app = express();
 
 var ansattListe = require('./ansattListe.js');
+var biltjeneste = require('./biltjeneste.js');
 
 var user = process.env.BC_USERNAME;
 var pass = process.env.BC_PASSWORD;
@@ -43,24 +44,50 @@ app.get('/messages', function(req, res) {
 
     var messages = _.first(body, 20);
 
-    var messagesWithEmployeeInfo = _.map(messages, function(message) {
-      if(message.user){
+
+    getFullMessageListWithEmployeeInfo(messages).then(function(messagesWithEmployeeInfo) {
+      console.log("returning " + messagesWithEmployeeInfo.length);
+      respond(error, response, res, messagesWithEmployeeInfo, 20);
+    });
+
+    
+  });
+  });
+
+
+function getFullMessageListWithEmployeeInfo(messages) {
+  var deferred = q.defer();
+
+console.log("messages " + messages.length)
+  var messagesWithEmployeeInfo = [];
+
+  var resolveIfFinished = _.after(messages.length, function(){
+    deferred.resolve(messagesWithEmployeeInfo);
+  });
+
+  _.each(messages, function(message) {
         var employee = getEmployee(message.user.name);
 
           if(employee){
             message.user.senioritet = employee.Seniority;
             message.user.avdeling = employee.Department; 
-          }  
-      } 
 
-      return message;
+            // Legge på bilinfo
+            biltjeneste.getBilForAnsatt(employee.Id).then(function(bil) {
+              message.user.car = bil;
+              messagesWithEmployeeInfo.push(message);
+              resolveIfFinished();
+            });
+          } else {
+            messagesWithEmployeeInfo.push(message);
+            resolveIfFinished();
+          }
 
       });
 
-    respond(error, response, res, messagesWithEmployeeInfo, 20);
-  });
-  });
+  return deferred.promise;
 
+}
 
 app.get('/message/:id', function(req, res) {
   mongo.Db.connect(mongoUri, function(err, db) {
@@ -73,6 +100,17 @@ app.get('/message/:id', function(req, res) {
     });
   });
 });
+
+
+app.get('/bil/:ansattid', function(req, res) {
+    biltjeneste.getBilForAnsatt(req.params.ansattid).then(function(bil) {
+      return res.json(bil);
+    }, function(reason){
+      return res.json({});
+    });
+    
+  });
+
 
 app.post('/push', express.bodyParser(), function(req, res) {
   var message = req.body;
@@ -113,7 +151,7 @@ function getSocialcastMessage(id, res) {
 }
 
 function getEmployee(name) {
-  return _.find(ansattListe.getAnsatte(), function(ansatt) {
+  return _.find(ansattListe.getAnsatte() , function(ansatt) {
         return _.intersection(name.split(" "), ansatt.Name.split(" ")).length >= 2;
   });
 }
