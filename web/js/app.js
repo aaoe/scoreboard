@@ -2,13 +2,42 @@
 
 	var test = '';
 
+	function youtube_parser(url){
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    if (match&&match[7].length==11){
+        return match[7];
+    }else{
+        return false;
+    }
+}
+
 	function urlify(text) {
 
     var urlRegex = /(https?:\/\/[^\s]+)/g;
 
     return text.replace(urlRegex, function(url) {
 
-        return '<a href="' + url + '">' + url + '</a>';
+    		if(url.indexOf('youtube') !== -1){
+
+    			var _videoid = youtube_parser(url);
+
+    			if(_videoid){
+
+    				return '<a href="' + url + '"><span class="youtube-thumb"><span class="glyphicon glyphicon-play"></span><img src="http://img.youtube.com/vi/'+_videoid+'/1.jpg" alt=""></span></a>';
+
+    			} else {
+    				return '<a href="' + url + '">' + url + '</a>';
+    			}
+
+    			
+
+
+    		} else {
+
+        	return '<a href="' + url + '">' + url + '</a>';
+
+        }
 
     });
 
@@ -19,7 +48,7 @@
 	function usernameify(text){		
     
     regex   = /(^|[^@\w])@(\w{1,40})\b/g,
-    replace = '$1<a href="https://socialcast.bekk.no/users/$2">@$2</a>';
+    replace = '$1<a href="https://socialcast.bekk.no/users/$2"><span class="glyphicon glyphicon-user"></span> $2</a>';
 
 		return text.replace( regex, replace );
 
@@ -30,7 +59,7 @@
     regex   = /\S*#(?:\[[^\]]+\]|\S+)/g;
 
 		return text.replace( regex, function(tag){
-			return '<a href="https://socialcast.bekk.no/users/">'+tag+'</a>';
+			return '<a href="https://socialcast.bekk.no/users/" class="tag"><span class="glyphicon glyphicon-tag"></span> '+tag.replace('#','')+'</a>';
 		} );
 
 	}
@@ -91,22 +120,22 @@
 
 	scoreboard.views.messages.prototype.registerEvents = function(){
 
-		$(document).on('scoreboard:views:messages:rendered', function(event, view){
+		$(document).one('scoreboard:views:messages:rendered', function(event, view){
 
 			console.log('scoreboard:views:messages:rendered', view);
-
-			
-
-			$('#messages .body').each(function(i, el){
-				$(this).html(urlify($(this).html()));
-			});
-
-			
 
 			$('#messages .body').each(function(i, el){
 				$(this).html(newlineify($(this).html()));
 
 			});
+
+			$('#messages .body').each(function(i, el){
+				$(this).html(urlify($(this).html()));
+			});
+
+
+	
+			
 
 			$('#messages .body').each(function(i, el){
 				$(this).html(usernameify($(this).html()));
@@ -140,6 +169,12 @@
 		this.registerEvents();
 
 		this.fetch();
+
+		var that = this;
+
+		setInterval(function(){
+			that.fetch();
+		},20000);
 
 	};
 
