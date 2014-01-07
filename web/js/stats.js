@@ -13,7 +13,32 @@
 			$.ajax({
 				url : '/stats-seniority'
 			}).done(function(response, status, xhr){
-				console.log(response);
+				
+				var _data = [];
+
+				$.each(response,function(type, number){
+
+					_data.push([
+						type, number
+					]);
+
+				});
+
+				console.log(_data);
+
+				$('#stats').highcharts({
+			        chart: {
+			            type: 'pie'
+			        },
+			        title: {
+			            text: 'Roller'
+			        },
+			        series: [{
+			        	type : "pie",
+			        	data : _data
+			        }]
+			    });
+
 			});
 		}
 
