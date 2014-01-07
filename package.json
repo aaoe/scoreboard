@@ -33,7 +33,8 @@
     "request": "~2.30.0",
     "async": "*",
     "underscore": "~1.5.2",
-    "q": "~1.0.0"
+    "q": "~1.0.0",
+    "mongodb": "~1.3.23"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.8.0",
