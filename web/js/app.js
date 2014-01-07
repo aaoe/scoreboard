@@ -14,7 +14,7 @@
 
 	function urlify(text) {
 
-    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    var urlRegex = /\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|)))/g;
 
     return text.replace(urlRegex, function(url) {
 
@@ -47,11 +47,13 @@
 
 	function usernameify(text){		
     
-    regex   = /(^|\W)(@[a-zøæå\d][\w-]*)/ig;
+    regex   = /(^|\W)(@[a-zøæå\d\w-]*)/ig;
     
 
 		return text.replace( regex, function(nick){
-			return '<a href="https://socialcast.bekk.no/users/$2"><span class="glyphicon glyphicon-user"></span> '+nick.replace('@','')+'</a>';
+
+			nick = nick.replace(/\n/g, '');
+			return ' <a href="https://socialcast.bekk.no/users/"><span class="glyphicon glyphicon-user"></span> '+nick.replace('@','')+'</a>';
 		} );
 
 	}
@@ -61,7 +63,7 @@
     regex   = /(^|\W)(#[a-zøæå\d][\w-]*)/ig;
 
 		return text.replace( regex, function(tag){
-			return '<a href="https://socialcast.bekk.no/users/" class="tag"> <span class="glyphicon glyphicon-tag"></span> '+tag.replace('#','')+'</a>';
+			return ' <a href="https://socialcast.bekk.no/users/" class="tag"><span class="glyphicon glyphicon-tag"></span> '+tag.replace('#','')+'</a>';
 		} );
 
 	}
@@ -126,26 +128,24 @@
 
 			console.log('scoreboard:views:messages:rendered', view);
 
+			var _html = '';
+
 			$('#messages .body').each(function(i, el){
-				$(this).html(newlineify($(this).html()));
+
+				_html = $(this).html();
+
+				
+				_html = urlify(_html);
+				_html = usernameify(_html);
+				_html = hashtagify(_html);
+
+				_html = newlineify(_html);
+
+				$(this).html(_html);
 
 			});
 
-			$('#messages .body').each(function(i, el){
-				$(this).html(urlify($(this).html()));
-			});
-
-
-	
-			
-
-			$('#messages .body').each(function(i, el){
-				$(this).html(usernameify($(this).html()));
-			});
-
-			$('#messages .body').each(function(i, el){
-				$(this).html(hashtagify($(this).html()));
-			});
+		
 
 		});
 
