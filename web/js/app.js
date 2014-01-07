@@ -27,7 +27,7 @@
     				return '<a href="' + url + '"><span class="youtube-thumb"><span class="glyphicon glyphicon-play"></span><img src="http://img.youtube.com/vi/'+_videoid+'/1.jpg" alt=""></span></a>';
 
     			} else {
-    				return '<a href="' + url + '">' + url + '</a>';
+    				return '<a href="' + url + '">' + url + ' <span class="glyphicon glyphicon-link"></span></a>';
     			}
 
     			
@@ -35,7 +35,7 @@
 
     		} else {
 
-        	return '<a href="' + url + '">' + url + '</a>';
+        	return '<a href="' + url + '">' + url + ' <span class="glyphicon glyphicon-link"></span></a>';
 
         }
 
