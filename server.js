@@ -129,6 +129,27 @@ app.post('/push', express.bodyParser(), function(req, res) {
   return res.send(200);
 });
 
+app.get('/stats-seniority', function(req, res) {
+  var fordeling = {trainee: 0, konsulent: 0, senior: 0, manager: 0};
+  _.each(ansattListe.getAnsatte(), function(ansatt) {
+    switch(ansatt.Seniority) {
+      case "Trainee":
+        fordeling.trainee = fordeling.trainee + 1;
+        break;
+      case "Konsulent":
+        fordeling.konsulent = fordeling.konsulent + 1;
+        break;
+      case "Senior":
+        fordeling.senior = fordeling.senior + 1;
+        break;
+      case "Manager":
+        fordeling.manager = fordeling.manager + 1;
+        break;  
+    }
+  });
+  return res.json(fordeling);
+});
+
 function getSocialcastMessage(id, res) {
   request.get({
     auth: auth,
