@@ -91,36 +91,9 @@ app.get('/message/:id', function(req, res) {
 
 function getEmployee(name) {
   return _.find(ansattListe.getAnsatte(), function(ansatt) {
-        return _.intersection(name, ansatt.Name).length >= 2;
+        return _.intersection(name.split(" "), ansatt.Name.split(" ")).length >= 2;
   });
-
-
 }
-
-function findName(scName, bekkName) {
-  if(scName == bekkName) {
-    return true;
-  }
-
-  var bekkNames = bekkName.split(" ");
-  var scNames = scName.split(" ");
-  var i = 0;
-
-  _.each(scNames, function(scPartOfName) {
-      _.each(bekkNames, function(bekkPartOfName) {
-          if(scPartOfName == bekkPartOfName) {
-            i++;
-          }
-      });
-  });
-
-  if(i >= 2) {
-    return true;
-  }
-
-  return false;
-}
-
 
 function respond(error, apiResponse, res, body, number) {
   if(!error && (apiResponse.statusCode == 200 || apiResponse.statusCode == 204)) {
