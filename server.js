@@ -1,6 +1,7 @@
 
 var express = require('express');
 var request = require('request');
+var mongo = require('mongodb');
 var _ = require('underscore');
 var http = require('http');
 var q = require('q');
@@ -14,6 +15,7 @@ var api_url = "/api";
 var authentication = 'http://'+ user + ':' + pass + '@';
 var api_base_url =  authentication + process.env.API_URL + api_url || "http://localhost" + api_url;
 var user_api_base_url =  authentication + process.env.USER_API_URL || "http://localhost";
+var mongoUri = process.env.MONGOLAB_URL || process.env.MONGOHQ_URL || 'mongodb://localhost:27017/scoreboard';
 
 var headers = {
   'User-Agent': 'request',
@@ -61,33 +63,54 @@ app.get('/messages', function(req, res) {
 
 
 app.get('/message/:id', function(req, res) {
-  request.get({
-    url: api_base_url + '/messages/' + req.params.id,
-    json: true,
-    headers: headers
-   }, function(error, response, body) {
+  mongo.Db.connect(mongoUri, function(err, db) {
+    db.collection("messages").findOne({id: parseInt(req.params.id, 10)}, function(err, item) {
+      if (!err && item) {
+        return res.json(item);
+      } else {
+        getSocialcastMessage(req.params.id, res);
+      }
+    });
+  });
+});
 
-    request.get({
-        url: api_base_url + '/messages/' + req.params.id + '/likes',
-        json: true,
-        headers: headers
-      }, function(error, response, b) {
-        body.likes = b;
+app.post('/push', express.bodyParser(), function(req, res) {
+  var message = req.body;
 
-
-   if(body.user){
-        var employee = getEmployee(body.user.name);
-
-          if(employee){
-            body.user.senioritet = employee.Seniority;
-            body.user.avdeling = employee.Department; 
-          }  
-      } 
-
-        respond(error, response, res, body);
+  mongo.Db.connect(mongoUri, function(err, db) {
+    db.collection('messages', function(er, collection) {
+      collection.insert(message, {safe: true}, function(er, rs) {
       });
     });
+  });
+
+  return res.send(200);
 });
+
+function getSocialcastMessage(id, res) {
+  request.get({
+    url: api_base_url + '/messages/' + id,
+    json: true,
+    headers: headers
+  }, function(error, response, body) {
+    request.get({
+      url: api_base_url + '/messages/' + id + '/likes',
+      json: true,
+      headers: headers
+    }, function(error, response, b) {
+      body.likes = b;
+
+      if(body.user){
+        var employee = getEmployee(body.user.name);
+        if(employee){
+          body.user.senioritet = employee.Seniority;
+          body.user.avdeling = employee.Department; 
+        }  
+      } 
+      respond(error, response, res, body);
+    });
+  });
+}
 
 function getEmployee(name) {
   return _.find(ansattListe.getAnsatte(), function(ansatt) {
