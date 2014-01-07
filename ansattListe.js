@@ -5,10 +5,15 @@ var _ = require('underscore');
 var user = process.env.BC_USERNAME;
 var pass = process.env.BC_PASSWORD;
 var authentication = 'http://'+ user + ':' + pass + '@';
-var user_api_base_url =  authentication + process.env.USER_API_URL || "http://localhost";
+var user_api_base_url =  'http://' + process.env.USER_API_URL || "http://localhost";
 
 var headers = {
   'User-Agent': 'request'
+};
+
+var auth = {
+  'user': user,
+  'pass': pass
 };
 
 var ansatte = [];
@@ -16,6 +21,7 @@ var ansatte = [];
 function cacheAnsattListe(){
 	
 	request.get({
+    auth: auth,
     url: user_api_base_url + '/all',
     json: true,
     headers: headers
@@ -37,6 +43,7 @@ function getAnsatt(id) {
 	var deferred = q.defer();
 
  request.get({
+    auth: auth,
     url: user_api_base_url + '/employee/' + id,
     json: true,
     headers: headers

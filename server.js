@@ -13,13 +13,18 @@ var user = process.env.BC_USERNAME;
 var pass = process.env.BC_PASSWORD;
 var api_url = "/api";
 var authentication = 'http://'+ user + ':' + pass + '@';
-var api_base_url =  authentication + process.env.API_URL + api_url || "http://localhost" + api_url;
-var user_api_base_url =  authentication + process.env.USER_API_URL || "http://localhost";
+var api_base_url =  'http://' + process.env.API_URL + api_url || "http://localhost" + api_url;
+var user_api_base_url =  'http://' + process.env.USER_API_URL || "http://localhost";
 var mongoUri = process.env.MONGOLAB_URL || process.env.MONGOHQ_URL || 'mongodb://localhost:27017/scoreboard';
 
 var headers = {
   'User-Agent': 'request',
   'Content-Type' : 'text/html'
+};
+
+var auth = {
+  'user': user,
+  'pass': pass
 };
 
 ansattListe.cacheAnsattListe();
@@ -33,6 +38,7 @@ app.get('/', function(req, res){
 //SOCIALCAST INTEGRATION
 app.get('/messages', function(req, res) {
   request.get({
+    auth: auth,
     url: api_base_url + '/messages',
     json: true,
     headers: headers
@@ -110,11 +116,13 @@ app.get('/stats-seniority', function(req, res) {
 
 function getSocialcastMessage(id, res) {
   request.get({
+    auth: auth,
     url: api_base_url + '/messages/' + id,
     json: true,
     headers: headers
   }, function(error, response, body) {
     request.get({
+      auth: auth,
       url: api_base_url + '/messages/' + id + '/likes',
       json: true,
       headers: headers
