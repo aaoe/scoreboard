@@ -47,19 +47,21 @@
 
 	function usernameify(text){		
     
-    regex   = /(^|[^@\w])@(\w{1,40})\b/g,
-    replace = '$1<a href="https://socialcast.bekk.no/users/$2"><span class="glyphicon glyphicon-user"></span> $2</a>';
+    regex   = /(^|\W)(@[a-zøæå\d][\w-]*)/ig;
+    
 
-		return text.replace( regex, replace );
+		return text.replace( regex, function(nick){
+			return '<a href="https://socialcast.bekk.no/users/$2"><span class="glyphicon glyphicon-user"></span> '+nick.replace('@','')+'</a>';
+		} );
 
 	}
 
 	function hashtagify(text){		
     
-    regex   = /\S*#(?:\[[^\]]+\]|\S+)/g;
+    regex   = /(^|\W)(#[a-zøæå\d][\w-]*)/ig;
 
 		return text.replace( regex, function(tag){
-			return '<a href="https://socialcast.bekk.no/users/" class="tag"><span class="glyphicon glyphicon-tag"></span> '+tag.replace('#','')+'</a>';
+			return '<a href="https://socialcast.bekk.no/users/" class="tag"> <span class="glyphicon glyphicon-tag"></span> '+tag.replace('#','')+'</a>';
 		} );
 
 	}
@@ -68,7 +70,7 @@
 
 		var regex = /\n/g;
 
-		return text.replace(regex, '<br/>');
+		return text.replace(regex, '<br\/>');
 
 	}
 
@@ -171,10 +173,10 @@
 		this.fetch();
 
 		var that = this;
-
+/*
 		setInterval(function(){
 			that.fetch();
-		},20000);
+		},20000);*/
 
 	};
 
